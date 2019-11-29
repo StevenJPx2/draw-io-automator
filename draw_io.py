@@ -1,13 +1,17 @@
+import os
+import re
+from argparse import ArgumentParser
+
 import selenium
 from selenium import webdriver
-from argparse import ArgumentParser
-import re
-import os
+
+CURRENT_PATH = os.getcwd()
+WAIT_TIME = 5
 
 def create_parser():
     parser = ArgumentParser()
     
-    parser.add_argument('filepath', help="Create drawio file in given filepath")
+    parser.add_argument('filepath', help="Create drawio file in given filepath", nargs="?", default=f"{CURRENT_PATH}{os.sep}Untitled\\ Diagram.drawio")
     parser.add_argument('-v', '--verbose', help="Verbose mode", action="store_true")
 
     return parser
@@ -15,8 +19,8 @@ def create_parser():
 def draw_io_file(file_path, v):
     driver = webdriver.Firefox()
     driver.get('https://draw.io/')
-    driver.implicitly_wait(10)
-    if v: print("Page fully loaded.")
+    driver.implicitly_wait(WAIT_TIME)
+    if v: print("Page is assumed to be fully loaded.")
     try:
         driver.find_element_by_link_text('Device').click()
         if v: print("Selected 'Device' as storage option.")
@@ -39,9 +43,8 @@ def main():
     split_file_path = os.path.split(file_path)
     os.chdir(split_file_path[0])
     
-    draw_io_file(split_file_path[1], args.verbose)
+    draw_io_file(split_file_path[1].replace(r'\ ', ' '), args.verbose)
     
     
 if __name__ == "__main__":
     main()
-
