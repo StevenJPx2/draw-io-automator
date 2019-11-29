@@ -4,8 +4,6 @@ from argparse import ArgumentParser
 import selenium
 from selenium import webdriver
 
-WAIT_TIME = 5
-
 def create_parser():
     parser = ArgumentParser()
     
@@ -17,7 +15,6 @@ def create_parser():
 def draw_io_file(filename, v):
     driver = webdriver.Firefox()
     driver.get('https://draw.io/')
-    driver.implicitly_wait(WAIT_TIME)
     if v: print("Page is assumed to be fully loaded.")
     try:
         driver.find_element_by_link_text('Device').click()
