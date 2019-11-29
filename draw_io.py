@@ -11,7 +11,7 @@ WAIT_TIME = 5
 def create_parser():
     parser = ArgumentParser()
     
-    parser.add_argument('filepath', help="Create drawio file in given filepath", nargs="?", default=f"{CURRENT_PATH}{os.sep}Untitled\\ Diagram.drawio")
+    parser.add_argument('filepath', help="Create drawio file in given filepath", nargs="?", default=r"Untitled\ Diagram.drawio")
     parser.add_argument('-v', '--verbose', help="Verbose mode", action="store_true")
 
     return parser
@@ -41,7 +41,11 @@ def main():
     file_path = args.filepath
     
     split_file_path = os.path.split(file_path)
-    os.chdir(split_file_path[0])
+    
+    try:
+        os.chdir(split_file_path[0])     
+    except FileNotFoundError:
+        os.chdir(CURRENT_PATH)
     
     draw_io_file(split_file_path[1].replace(r'\ ', ' '), args.verbose)
     
